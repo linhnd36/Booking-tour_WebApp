@@ -1,0 +1,17 @@
+.loginclass {
+    z-index: 9999;
+    margin-top: -200px;
+    position: fixed;
+    width: 500px;
+    height: 200px;
+    margin: 7% auto;
+    left: 0;
+    right: 0;
+}
+
+.bgLogin {
+    background-image: url(https://www.phptravels.net/uploads/images/slider/f4n79teyk0g8kg8.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
