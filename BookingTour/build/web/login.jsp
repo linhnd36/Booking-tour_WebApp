@@ -18,19 +18,25 @@
 
     <body class="bgLogin">
         <div class="loginclass">
-            <form action="" method="POST" class="p-4" style="background-color: white; margin-top: 50px; border-radius: 2%;">
+            <form action="login" method="POST" class="p-4" style="background-color: white; margin-top: 50px; border-radius: 2%;">
                 <h1 class="text-center">Booking Tour</h1>
                 <h4 class="text-center">Login</h4>
                 <div class="form-group">
-                    <label for="email">Username :</label>
-                    <input type="email" class="form-control" placeholder="Enter email" name="txtUsername">
+                    <label >Username :</label>
+                    <input type="text" class="form-control" placeholder="Enter email" name="txtUsername">
                 </div>
                 <div class="form-group">
                     <label for="pwd">Password :</label>
                     <input type="password" class="form-control" placeholder="Enter password" name="txtPassword">
                 </div>
+                <c:set var="error" value="${requestScope.ERROR}"/>
+                <c:if test="${not empty error}">
+                    <div class="alert alert-danger" role="alert">
+                        ${error}
+                    </div>
+                </c:if>
                 <button type="submit" class="btn btn-success w-100">Login</button>
-                <button type="submit" class="btn btn-outline-primary w-100 mt-3">Login with Facebook</button>
+                <a href="login-facebook" class="btn btn-outline-primary w-100 mt-3">Login with Facebook</a>
             </form>
         </div>
     </body>

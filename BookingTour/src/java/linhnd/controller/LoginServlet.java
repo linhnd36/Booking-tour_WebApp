@@ -6,20 +6,25 @@
 package linhnd.controller;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import linhnd.daos.UsersDAO;
+import linhnd.dtos.UsersDTO;
 
 /**
  *
  * @author PC
  */
-@WebServlet(name = "SearchServlet", urlPatterns = {"/SearchServlet"})
-public class SearchServlet extends HttpServlet {
+@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
+public class LoginServlet extends HttpServlet {
+
+    private static final String ERROR = "login.jsp";
+    private static final String ADMIN = "insert.jsp";
+    private static final String USER = "search.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,42 +38,28 @@ public class SearchServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        int priceFrom, priceTo;
+        String url = ERROR;
         try {
-            String dateFrom = request.getParameter("txtDateFrom");
-            String dateTo = request.getParameter("txtDateTo");
-            String place = request.getParameter("txtPlace");
-            String price = request.getParameter("txtPrice");
-            if (price.equals("0")) {
-                priceFrom = 0;
-                priceTo = 1000000;
-            } else if (price.equals("1")) {
-                priceFrom = 1000000;
-                priceTo = 2000000;
-            } else if (price.equals("2")) {
-                priceFrom = 2000000;
-                priceTo = 3000000;
-            } else if (price.equals("3")) {
-                priceFrom = 3000000;
-                priceTo = 4000000;
-            } else if (price.equals("4")) {
-                priceFrom = 4000000;
-                priceTo = 5000000;
-            } else if (price.equals("5")) {
-                priceFrom = 5000000;
-                priceTo = 0;
+            String username = request.getParameter("txtUsername");
+            String password = request.getParameter("txtPassword");
+            HttpSession session = request.getSession();
+
+            UsersDAO dao = new UsersDAO();
+            if (dao.checkLogin(username, password)) {
+                UsersDTO dto = dao.getUser(username, password);
+                session.setAttribute("USER", dto);
+                if (dto.getRoleId().equals("ADMIN")) {
+                    url = ADMIN;
+                } else if (dto.getRoleId().equals("USER")) {
+                    url = USER;
+                }
+            } else {
+                request.setAttribute("ERROR", "User is not found !");
             }
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date dateFromD = dateFormat.parse(dateFrom);
-            Date dateToD = dateFormat.parse(dateTo);
-            if (!dateFromD.before(dateToD)) {
-                Date tmp = dateFromD;
-                dateFromD = dateToD;
-                dateToD = tmp;
-            }
-            
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
         }
 
     }

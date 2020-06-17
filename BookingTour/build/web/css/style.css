@@ -10,8 +10,29 @@
 }
 
 .bgLogin {
-    background-image: url(https://www.phptravels.net/uploads/images/slider/f4n79teyk0g8kg8.jpg);
+    background-image: url(../images/bg-img-01.jpg);
     background-repeat: no-repeat;
     background-size: cover;
 }
 
+.bg-search{
+    background-image: url(../images//bg-img-01.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 470px;
+}
+.search-form{
+    background-color:  rgba(33, 40, 66, 0.8);
+    height: 380px;
+    width: 550px;
+    border-radius: 2%;
+}
+.discount-img{
+    height: 200px;
+    width: 320px;
+}
+
+.file {
+    visibility: hidden;
+    position: absolute;
+  }

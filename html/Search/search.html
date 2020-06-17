@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Search Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">BookingTour</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="PageSearchController">View Cart</a>
+                    </li>
+                    <li class="nav-item ml-5">
+                        <span class="text-danger">Welcome </span>
+                    </li>
+                </ul>
+                <div>
+                    <button class="btn btn-outline-success" type="submit" value="Logout" name="action">
+                        Log In
+                    </button>
+                    <button class="btn btn-outline-secondary" type="submit" value="Logout" name="action">
+                        Log Out
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="row bg-search" >
+        <div class="col-6" style="padding: 80px;">
+            <div class="search-form ">
+                <div>
+                    <form class="p-3">
+                        <div class="form-group m-3 ">
+                            <label class="text-white">Location</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1"
+                                placeholder="Enter Location">
+                        </div>
+                        <div class="form-group m-3 row">
+                            <div class="col-6">
+                                <label class="text-white">Date From</label>
+                                <input type="date" class="form-control" placeholder="Date From">
+                            </div>
+                            <div class="col-6">
+                                <label class="text-white">Date To</label>
+                                <input type="date" class="form-control" placeholder="Date To">
+                            </div>
+                        </div>
+                        <div class="form-group w-50 ml-5">
+                            <label class="text-white">Select Price</label>
+                            <select class="form-control">
+                                <option>1.000.000 - 2.000.000</option>
+                                <option>2.000.000 - 3.000.000</option>
+                                <option>3.000.000 - 4.000.000</option>
+                                <option>5.000.000 - 6.000.000</option>
+                                <option> > 6.000.000 </option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success w-75 ml-5">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <h1 class="text-white" style="padding-top: 150px;">Travle to the World</h1>
+        </div>
+    </div>
+    <div class="container">
+        <h1 class="text-center mt-2">Some discount</h1>
+        <div class="row m-4">
+            <div class=" col-4 p-3">
+                <div class="card">
+                    <img class="card-img-top discount-img" src="https://static-sixteenventures.netdna-ssl.com/wp-content/uploads/2014/12/discounts-300x230.jpg" alt="Card image cap">
+                    <div class="card-body ">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                            of
+                            the card's content.</p>
+                        <a class="btn btn-primary  text-white">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <div class=" col-4 p-3">
+                <div class="card">
+                    <img class="card-img-top discount-img" src="https://cdn.aarp.net/content/dam/aarp/home-and-family/family-and-friends/2015-04/1140-Deal-and-Discounts-for-Veterans.imgcache.rev9fd0e4cd7a439a9cee066f4212c83030.jpg" alt="Card image cap">
+                    <div class="card-body ">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                            of
+                            the card's content.</p>
+                        <a class="btn btn-primary  text-white">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <div class=" col-4 p-3">
+                <div class="card">
+                    <img class="card-img-top" src="..." alt="Card image cap">
+                    <div class="card-body ">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                            of
+                            the card's content.</p>
+                        <a class="btn btn-primary  text-white">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <div class=" col-4 p-3">
+                <div class="card">
+                    <img class="card-img-top" src="..." alt="Card image cap">
+                    <div class="card-body ">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                            of
+                            the card's content.</p>
+                        <a class="btn btn-primary  text-white">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

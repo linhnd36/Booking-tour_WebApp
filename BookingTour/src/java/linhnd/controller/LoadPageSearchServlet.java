@@ -6,20 +6,24 @@
 package linhnd.controller;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import linhnd.daos.DiscountCodeDAO;
+import linhnd.dtos.DiscountCodeDTO;
 
 /**
  *
  * @author PC
  */
-@WebServlet(name = "SearchServlet", urlPatterns = {"/SearchServlet"})
-public class SearchServlet extends HttpServlet {
+@WebServlet(name = "LoadPageSearchServlet", urlPatterns = {"/LoadPageSearchServlet"})
+public class LoadPageSearchServlet extends HttpServlet {
+
+    private static final String ERROR = "error";
+    private static final String SUCESS = "search.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,44 +37,17 @@ public class SearchServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        int priceFrom, priceTo;
+        String url = ERROR;
         try {
-            String dateFrom = request.getParameter("txtDateFrom");
-            String dateTo = request.getParameter("txtDateTo");
-            String place = request.getParameter("txtPlace");
-            String price = request.getParameter("txtPrice");
-            if (price.equals("0")) {
-                priceFrom = 0;
-                priceTo = 1000000;
-            } else if (price.equals("1")) {
-                priceFrom = 1000000;
-                priceTo = 2000000;
-            } else if (price.equals("2")) {
-                priceFrom = 2000000;
-                priceTo = 3000000;
-            } else if (price.equals("3")) {
-                priceFrom = 3000000;
-                priceTo = 4000000;
-            } else if (price.equals("4")) {
-                priceFrom = 4000000;
-                priceTo = 5000000;
-            } else if (price.equals("5")) {
-                priceFrom = 5000000;
-                priceTo = 0;
-            }
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date dateFromD = dateFormat.parse(dateFrom);
-            Date dateToD = dateFormat.parse(dateTo);
-            if (!dateFromD.before(dateToD)) {
-                Date tmp = dateFromD;
-                dateFromD = dateToD;
-                dateToD = tmp;
-            }
-            
+            DiscountCodeDAO dao = new DiscountCodeDAO();
+            List<DiscountCodeDTO> ListDto = dao.getLisDiscountCode();
+            request.setAttribute("LIST_DISCOUNT", ListDto);
+            url = SUCESS;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
