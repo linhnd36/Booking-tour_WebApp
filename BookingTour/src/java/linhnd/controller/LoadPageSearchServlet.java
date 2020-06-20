@@ -6,6 +6,8 @@
 package linhnd.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,7 +43,11 @@ public class LoadPageSearchServlet extends HttpServlet {
         try {
             DiscountCodeDAO dao = new DiscountCodeDAO();
             List<DiscountCodeDTO> ListDto = dao.getLisDiscountCode();
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String dateNow = dateFormat.format(date);
             request.setAttribute("LIST_DISCOUNT", ListDto);
+            request.setAttribute("DATE_NOW", dateNow);
             url = SUCESS;
         } catch (Exception e) {
             e.printStackTrace();

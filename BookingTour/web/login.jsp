@@ -3,7 +3,7 @@
     Created on : Jun 14, 2020, 3:05:35 PM
     Author     : PC
 --%>
-
+<%@page import="linhnd.utils.APIWrapper"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
@@ -23,7 +23,7 @@
                 <h4 class="text-center">Login</h4>
                 <div class="form-group">
                     <label >Username :</label>
-                    <input type="text" class="form-control" placeholder="Enter email" name="txtUsername">
+                    <input type="text" class="form-control" placeholder="Enter username" name="txtUsername">
                 </div>
                 <div class="form-group">
                     <label for="pwd">Password :</label>
@@ -36,7 +36,7 @@
                     </div>
                 </c:if>
                 <button type="submit" class="btn btn-success w-100">Login</button>
-                <a href="login-facebook" class="btn btn-outline-primary w-100 mt-3">Login with Facebook</a>
+                <a href="${ APIWrapper.getDiaLogLink() }" class="btn btn-outline-primary w-100 mt-3">Login with Facebook</a>
             </form>
         </div>
     </body>

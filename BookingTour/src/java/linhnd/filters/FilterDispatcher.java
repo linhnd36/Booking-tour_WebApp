@@ -126,7 +126,7 @@ public class FilterDispatcher implements Filter {
                     try {
                         url = bundle.getString(lable);
                     } catch (MissingResourceException e) {
-                        url = "login.jsp";
+                        url = "LoadPageSearchServlet";
                     }
                 }
                 RequestDispatcher rd = req.getRequestDispatcher(url);

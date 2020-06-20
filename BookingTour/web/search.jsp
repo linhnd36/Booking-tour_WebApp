@@ -19,16 +19,16 @@
     <body>
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" href="#">BookingTour</a>
-                <div class="collapse navbar-collapse">
-                    <c:set var="user" value="${sessionScope.USER}" />
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="sssssss">Search Tour</a>
-                        </li>
-                        <c:if test="${user.roleId == ADMIN }">
+                <c:set var="user" value="${sessionScope.USER}" />
+                <a class="navbar-brand" href="load-search-page">Booking Tour <c:if test="${user.roleId == 'ADMIN'}">- Admin</c:if></a>
+                    <div class="collapse navbar-collapse">                
+                        <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="sssssss">Insert Tour</a>
+                                <a class="nav-link active" href="load-search-page">Search Tour</a>
+                            </li>
+                        <c:if test="${not empty user && user.roleId == 'ADMIN' }">
+                            <li class="nav-item">
+                                <a class="nav-link" href="load-insert-page">Insert Tour</a>
                             </li>
                         </c:if>
                         <c:if test="${not empty user}">
@@ -39,13 +39,15 @@
                     </ul>
                     <div>
                         <c:if test="${ user == null}">
-                            <a class="btn btn-outline-success" href="login-page">
+                            <a class="btn btn-outline-success  text-white" href="login-page">
                                 Log In
                             </a>
                         </c:if>
-                        <c:if test="${not empty user}">
-                            <button type="button" class="btn btn-outline-warning">View Cart</button>
-                            <a class="btn btn-outline-secondary" href="logout">
+                        <c:if test="${not empty user }">
+                            <c:if test="${ user.roleId != 'ADMIN'}">
+                                <a type="button" class="btn btn-outline-warning  text-white">View Cart</a>
+                            </c:if>                    
+                            <a class="btn btn-outline-secondary  text-white" href="logout">
                                 Log Out
                             </a>
                         </c:if>
@@ -61,27 +63,26 @@
                             <div class="form-group m-3 ">
                                 <label class="text-white">Place</label>
                                 <input type="text" class="form-control"
-                                       placeholder="Enter Location" name="txtPlace">
+                                       placeholder="Enter Location" name="txtPlace" value="${param.txtPlace}">
                             </div>
                             <div class="form-group m-3 row">
                                 <div class="col-6">
                                     <label class="text-white">Date From</label>
-                                    <input type="date" class="form-control" placeholder="Date From" name="txtDateFrom">
+                                    <input type="date" class="form-control" min="${requestScope.DATE_NOW}" placeholder="Date From" name="txtDateFrom">
                                 </div>
                                 <div class="col-6">
                                     <label class="text-white">Date To</label>
-                                    <input type="date" class="form-control" placeholder="Date To" name="txtDateTo">
+                                    <input type="date" class="form-control" min="${requestScope.DATE_NOW}" placeholder="Date To" name="txtDateTo">
                                 </div>
                             </div>
                             <div class="form-group w-50 ml-5">
                                 <label class="text-white">Select Price</label>
                                 <select class="form-control" name="txtPrice">
-                                    <option value="0"> < 1.000.000</option>
-                                    <option value="1">1.000.000 - 2.000.000</option>
-                                    <option value="2">2.000.000 - 3.000.000</option>
-                                    <option value="3">3.000.000 - 4.000.000</option>
-                                    <option value="4">4.000.000 - 5.000.000</option>
-                                    <option value="5"> > 5.000.000 </option>
+                                    <option value="4" > ALL </option>
+                                    <option value="0"> < 100$</option>
+                                    <option value="1">100$ - 200$</option>
+                                    <option value="2">200$ - 300$</option>
+                                    <option value="3"> > 300$ </option>                                 
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-success w-75 ml-5">Search</button>
@@ -94,22 +95,76 @@
             </div>
         </div>
         <div class="container">
-            <h1 class="text-center mt-2">Some discount</h1>
+
             <div class="row m-4">
-                <c:forEach var="dto" items="${requestScope.LIST_DISCOUNT}" >
-                    <div class=" col-4 p-3">
-                        <div class="card">
-                            <img class="card-img-top discount-img" src="${dto.imagesLink}" alt="Card image cap">
-                            <div class="card-body ">
-                                <h5 class="card-title">${dto.name}</h5>
-                                <p class="card-text">  ${dto.percentDis} + ${dto.expiryDate} </p>
-                                <a class="btn btn-primary  text-white">${dto.discountId}</a>
+                <c:set var="listDiscount" value="${requestScope.LIST_DISCOUNT}"/>
+                <c:if test="${not empty listDiscount}">
+                    <h1 class=" mt-2">Some discount</h1>
+                    <div class="row">
+                        <c:forEach var="dto" items="${listDiscount}" >
+                            <div class=" col-4 p-3">
+                                <div class="card">
+                                    <img class="card-img-top discount-img" src="${dto.imagesLink}" alt="Card image cap">
+                                    <div class="card-body ">
+                                        <h5 class="card-title">${dto.name}</h5>
+                                        <p class="card-text"> Expiry Date: ${dto.expiryDate} </p>
+                                        <p class="card-text"> Percent Discount: ${dto.percentDis}% </p>
+                                        <a class="btn btn-primary  text-white">${dto.discountId}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </c:if>
+            </div>
+            <c:set var="listTour" value="${requestScope.SUBLIST_SEARCH}"/>
+            <c:if test="${ not empty listTour}">
+                <h1 class="text-center mt-2">Search Result</h1>
+                <div class="row m-5">
+                    <c:forEach var="dtoTour" items="${listTour}">
+                        <div class="col-sm-6 mt-2">
+                            <div class="card">
+                                <img class="card-img-top imageTour"
+                                     src="./images/${dtoTour.imageLink}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${dtoTour.tourName}</h5>
+                                    <p class="card-text"><strong>Date:</strong>  ${dtoTour.fromDate}   -->  ${dtoTour.toDate} </p>
+                                    <p class="card-text"><strong>Place:</strong>  ${dtoTour.place} -- <span style="color: red">Price: ${dtoTour.price}$</span> </p>   
+                                    <p class="card-text"><strong>Quantity:</strong>  ${dtoTour.quota} </p>
+                                    <c:url var="url" value="add-tour-to-cart">
+                                        <c:param name="txtTourId" value="${dtoTour.tourID}"/>
+                                    </c:url>
+                                    <a href="${url}" class="btn btn-primary">Add to Cart</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </c:forEach>
-            </div>
+                    </c:forEach>
+                </div>
+            </c:if>
+            <c:if test="${empty listTour && empty listDiscount}">
+                <div class="alert alert-danger" role="alert">
+                    No Result !
+                </div>
+            </c:if>
+
         </div>
+        <nav>
+            <c:if test="${PAGE_DETAIL > 1 && empty listDiscount}">
+                <ul class="pagination pt-2" style="margin-left: 40%;">
+                    <c:forEach var="index" begin="1" end="${PAGE_DETAIL}">
+                        <form action="paging-page-search">
+                            <li class="page-item 
+                                <c:if test="${index == CURRENT_PAGE_DETAIL}">
+                                    active
+                                </c:if>
+                                ">
+                                <input class="page-link" type="submit" value="${index}" name="pageSearchIndex"/>
+                            </li>
+                        </form>
+                    </c:forEach>
+                </ul>
+            </c:if>                      
+        </nav>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
                 integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>

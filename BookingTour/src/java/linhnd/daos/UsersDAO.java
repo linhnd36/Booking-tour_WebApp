@@ -72,9 +72,59 @@ public class UsersDAO implements Serializable {
                     dto.setRoleId(rs.getString("RoleId"));
                 }
             }
-        } finally { 
+        } finally {
             close();
         }
         return dto;
+    }
+
+    public UsersDTO checkFacebookID(String facebookId) throws SQLException, NamingException {
+        UsersDTO users = null;
+        try {
+            conn = MyConnection.getConnection();
+            if (conn != null) {
+                String sql = " SELECT FacebookID,Name FROM dbo.Users WHERE FacebookID = ? ";
+                stm = conn.prepareStatement(sql);
+                stm.setString(1, facebookId);
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    users = new UsersDTO();
+                    users.setFacebookID(rs.getString("FacebookID"));
+                    users.setName(rs.getString("Name"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return users;
+    }
+
+    public boolean registerFacebookAccount(String name, String facebookID, String facebookLink) throws SQLException, NamingException {
+        boolean check = false;
+        try {
+            conn = MyConnection.getConnection();
+            if (conn != null) {
+                String sql = " INSERT INTO dbo.Users ( UserID , Name ,FacebookID ,FacebookLink ,StatusId ,RoleId) "
+                        + " VALUES  ( ? , ? ,  ? ,  ? ,  ? , ? ) ";
+                stm = conn.prepareStatement(sql);
+                stm.setString(1, facebookID);
+                stm.setString(2, name);
+                stm.setString(3, facebookID);
+                stm.setString(4, facebookLink);
+                stm.setString(5, "ACTIVE");
+                stm.setString(6, "USER");
+                int row = stm.executeUpdate();
+                if (row > 0) {
+                    check = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+        return check;
     }
 }

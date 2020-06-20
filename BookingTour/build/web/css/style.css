@@ -35,4 +35,9 @@
 .file {
     visibility: hidden;
     position: absolute;
-  }
+}
+.imageTour {
+    width: 475px;
+    height: 300px;
+}
+

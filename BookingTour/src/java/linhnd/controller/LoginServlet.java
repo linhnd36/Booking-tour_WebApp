@@ -23,7 +23,7 @@ import linhnd.dtos.UsersDTO;
 public class LoginServlet extends HttpServlet {
 
     private static final String ERROR = "login.jsp";
-    private static final String ADMIN = "insert.jsp";
+    private static final String ADMIN = "LoadInputTourServlet";
     private static final String USER = "search.jsp";
 
     /**
