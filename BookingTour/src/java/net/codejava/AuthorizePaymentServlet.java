@@ -5,11 +5,9 @@
  */
 package net.codejava;
 
-import com.paypal.api.payments.PayerInfo;
-import com.paypal.api.payments.Payment;
-import com.paypal.api.payments.Transaction;
 import com.paypal.base.rest.PayPalRESTException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author PC
  */
-@WebServlet(name = "ExecutePaypalServlet", urlPatterns = {"/ExecutePaypalServlet"})
-public class ExecutePaypalServlet extends HttpServlet {
+@WebServlet(name = "AuthorizePaymentServlet", urlPatterns = {"/AuthorizePaymentServlet"})
+public class AuthorizePaymentServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,28 +33,24 @@ public class ExecutePaypalServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String paymentId = request.getParameter("paymentId");
-        String payerId = request.getParameter("PayerID");
+        String product = request.getParameter("product");
+        String subtotal = request.getParameter("subtotal");
+        String shipping = request.getParameter("shipping");
+        String tax = request.getParameter("tax");
+        String total = request.getParameter("total");
+
+        OrderDetail orderDetail = new OrderDetail(product, subtotal, shipping, tax, total);
 
         try {
-            //BuildDAO dao = new BuildDAO();
-            //dao.updateStatusBuildOnline(payerId);
             PaymentServices paymentServices = new PaymentServices();
-            Payment payment = paymentServices.executePayment(paymentId, payerId);
+            String approvalLink = paymentServices.authorizePayment(orderDetail);
 
-            PayerInfo payerInfo = payment.getPayer().getPayerInfo();
-            Transaction transaction = payment.getTransactions().get(0);
-            request.setAttribute("payer", payerInfo);
-            request.setAttribute("transaction", transaction);
-            //dao.updateStatusBuildOnline(transaction.getDescription());
-            request.getRequestDispatcher("receipt.jsp").forward(request, response);
+            response.sendRedirect(approvalLink);
 
         } catch (PayPalRESTException ex) {
             request.setAttribute("errorMessage", ex.getMessage());
             ex.printStackTrace();
             request.getRequestDispatcher("error.jsp").forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
