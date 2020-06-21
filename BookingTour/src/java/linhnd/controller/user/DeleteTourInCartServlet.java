@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import linhnd.carts.CartObject;
 import linhnd.carts.TourInCartDTO;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -22,6 +23,8 @@ import linhnd.carts.TourInCartDTO;
  */
 @WebServlet(name = "DeleteTourInCartServlet", urlPatterns = {"/DeleteTourInCartServlet"})
 public class DeleteTourInCartServlet extends HttpServlet {
+
+    static Logger LOGGER = Logger.getLogger(DeleteTourInCartServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

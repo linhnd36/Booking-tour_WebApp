@@ -26,6 +26,7 @@ import linhnd.daos.UserHaveDiscountDAO;
 import linhnd.dtos.DiscountCodeDTO;
 import linhnd.dtos.ToursDTO;
 import linhnd.dtos.UsersDTO;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -33,6 +34,8 @@ import linhnd.dtos.UsersDTO;
  */
 @WebServlet(name = "CheckOutServlet", urlPatterns = {"/CheckOutServlet"})
 public class CheckOutServlet extends HttpServlet {
+
+    static Logger LOGGER = Logger.getLogger(CheckOutServlet.class);
 
     private static final String ERROR = "cart.jsp";
 
@@ -105,7 +108,7 @@ public class CheckOutServlet extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.fatal(e);
         }
     }
 

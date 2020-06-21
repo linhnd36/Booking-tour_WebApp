@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import linhnd.daos.BookingDetailDAO;
 import linhnd.daos.ToursDAO;
 import linhnd.dtos.ToursDTO;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -27,6 +28,8 @@ import linhnd.dtos.ToursDTO;
  */
 @WebServlet(name = "SearchServlet", urlPatterns = {"/SearchServlet"})
 public class SearchServlet extends HttpServlet {
+
+    static Logger LOGGER = Logger.getLogger(PagingPageSearchServlet.class);
 
     private static final int PAGE_SIZE = 20;
     private static final String SUCESS = "PagingPageSearchServlet";
@@ -98,7 +101,7 @@ public class SearchServlet extends HttpServlet {
             session.setAttribute("PAGE_DETAIL", page);
             url = SUCESS;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.fatal(e);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -20,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "LoadInputTourServlet", urlPatterns = {"/LoadInputTourServlet"})
 public class LoadInputTourServlet extends HttpServlet {
+
+    static Logger LOGGER = Logger.getLogger(LoadInputTourServlet.class);
 
     private static final String ERROR = "error.jsp";
     private static final String SUCESS = "insert.jsp";
@@ -44,7 +47,7 @@ public class LoadInputTourServlet extends HttpServlet {
             request.setAttribute("DATENOW", dateS);
             url = SUCESS;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.fatal(e);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

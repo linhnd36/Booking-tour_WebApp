@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import linhnd.carts.CartObject;
 import linhnd.carts.TourInCartDTO;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -22,6 +23,8 @@ import linhnd.carts.TourInCartDTO;
  */
 @WebServlet(name = "UpdateQuantityCartServlet", urlPatterns = {"/UpdateQuantityCartServlet"})
 public class UpdateQuantityCartServlet extends HttpServlet {
+
+    static Logger LOGGER = Logger.getLogger(UpdateQuantityCartServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -57,7 +60,7 @@ public class UpdateQuantityCartServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.fatal(e);
         } finally {
             response.sendRedirect("view-cart");
         }

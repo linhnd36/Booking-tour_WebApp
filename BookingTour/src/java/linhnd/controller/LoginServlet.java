@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import linhnd.daos.UsersDAO;
 import linhnd.dtos.UsersDTO;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -21,6 +22,8 @@ import linhnd.dtos.UsersDTO;
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
+
+    static Logger LOGGER = Logger.getLogger(LoginServlet.class);
 
     private static final String ERROR = "login.jsp";
     private static final String ADMIN = "LoadInputTourServlet";
@@ -57,7 +60,7 @@ public class LoginServlet extends HttpServlet {
                 request.setAttribute("ERROR", "User is not found !");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.fatal(e);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

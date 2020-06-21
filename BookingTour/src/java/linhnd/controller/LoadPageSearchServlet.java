@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import linhnd.daos.DiscountCodeDAO;
 import linhnd.dtos.DiscountCodeDTO;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -23,6 +24,8 @@ import linhnd.dtos.DiscountCodeDTO;
  */
 @WebServlet(name = "LoadPageSearchServlet", urlPatterns = {"/LoadPageSearchServlet"})
 public class LoadPageSearchServlet extends HttpServlet {
+
+    static Logger LOGGER = Logger.getLogger(LoadPageSearchServlet.class);
 
     private static final String ERROR = "error";
     private static final String SUCESS = "search.jsp";
@@ -50,7 +53,7 @@ public class LoadPageSearchServlet extends HttpServlet {
             request.setAttribute("DATE_NOW", dateNow);
             url = SUCESS;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.fatal(e);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

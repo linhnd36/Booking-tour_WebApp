@@ -10,11 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import javax.naming.NamingException;
-import linhnd.carts.TourInCartDTO;
 import linhnd.dbs.MyConnection;
-import linhnd.dtos.ToursDTO;
 
 /**
  *

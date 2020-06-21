@@ -6,7 +6,6 @@
 package linhnd.controller.user;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +17,7 @@ import linhnd.carts.CartObject;
 import linhnd.carts.TourInCartDTO;
 import linhnd.daos.BookingDetailDAO;
 import linhnd.daos.ToursDAO;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -25,6 +25,8 @@ import linhnd.daos.ToursDAO;
  */
 @WebServlet(name = "AddTourToCartServlet", urlPatterns = {"/AddTourToCartServlet"})
 public class AddTourToCartServlet extends HttpServlet {
+
+    static Logger LOGGER = Logger.getLogger(AddTourToCartServlet.class);
 
     private static final String SUCESS = "paging-page-search";
 
@@ -67,7 +69,7 @@ public class AddTourToCartServlet extends HttpServlet {
             session.setAttribute("TOTAL_BOOKING", totalBooking);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.fatal(e);
         } finally {
             response.sendRedirect(url);
         }

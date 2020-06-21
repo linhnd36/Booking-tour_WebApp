@@ -16,6 +16,7 @@ import linhnd.daos.DiscountCodeDAO;
 import linhnd.daos.UserHaveDiscountDAO;
 import linhnd.dtos.DiscountCodeDTO;
 import linhnd.dtos.UsersDTO;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -23,6 +24,8 @@ import linhnd.dtos.UsersDTO;
  */
 @WebServlet(name = "CheckDiscountCodeServlet", urlPatterns = {"/CheckDiscountCodeServlet"})
 public class CheckDiscountCodeServlet extends HttpServlet {
+
+    static Logger LOGGER = Logger.getLogger(CheckDiscountCodeServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,7 +58,7 @@ public class CheckDiscountCodeServlet extends HttpServlet {
                 request.setAttribute("DISCOUNT_CODE", "ERROR");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.fatal(e);
         } finally {
             request.getRequestDispatcher("cart.jsp").forward(request, response);
         }

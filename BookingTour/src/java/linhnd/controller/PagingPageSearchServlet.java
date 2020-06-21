@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import linhnd.dtos.ToursDTO;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -21,6 +22,8 @@ import linhnd.dtos.ToursDTO;
  */
 @WebServlet(name = "PagingPageSearchServlet", urlPatterns = {"/PagingPageSearchServlet"})
 public class PagingPageSearchServlet extends HttpServlet {
+
+    static Logger LOGGER = Logger.getLogger(PagingPageSearchServlet.class);
 
     private static final String ERROR = "error.jsp";
     private static final String SUCESS = "search.jsp";
@@ -58,7 +61,7 @@ public class PagingPageSearchServlet extends HttpServlet {
             request.setAttribute("CURRENT_PAGE_DETAIL", index);
             url = SUCESS;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.fatal(e);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

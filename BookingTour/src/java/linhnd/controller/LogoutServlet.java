@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -19,8 +20,12 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/LogoutServlet"})
 public class LogoutServlet extends HttpServlet {
+
+    static Logger LOGGER = Logger.getLogger(LogoutServlet.class);
+
     private static final String ERROR = "error";
     private static final String SUCESS = "";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,8 +44,8 @@ public class LogoutServlet extends HttpServlet {
             session.invalidate();
             url = SUCESS;
         } catch (Exception e) {
-            e.printStackTrace();
-        }finally{
+            LOGGER.fatal(e);
+        } finally {
             response.sendRedirect(url);
         }
 

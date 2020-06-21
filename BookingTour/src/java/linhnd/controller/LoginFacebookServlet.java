@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import linhnd.daos.UsersDAO;
 import linhnd.dtos.UsersDTO;
 import linhnd.utils.APIWrapper;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -23,8 +24,10 @@ import linhnd.utils.APIWrapper;
 @WebServlet(name = "LoginFacebookServlet", urlPatterns = {"/LoginFacebookServlet"})
 public class LoginFacebookServlet extends HttpServlet {
 
-    private static String ERROR = "login-page";
-    private static String SUCESS = "load-search-page";
+    static Logger LOGGER = Logger.getLogger(LoginFacebookServlet.class);
+
+    private static final String ERROR = "login-page";
+    private static final String SUCESS = "load-search-page";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -64,7 +67,7 @@ public class LoginFacebookServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.fatal(e);
         }
     }
 

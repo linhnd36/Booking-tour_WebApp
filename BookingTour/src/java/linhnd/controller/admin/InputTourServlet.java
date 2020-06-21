@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import linhnd.daos.ToursDAO;
 import linhnd.dtos.ErrorInputTour;
 import linhnd.dtos.ToursDTO;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -27,6 +28,8 @@ import linhnd.dtos.ToursDTO;
  */
 @WebServlet(name = "InputTourServlet", urlPatterns = {"/InputTourServlet"})
 public class InputTourServlet extends HttpServlet {
+
+    static Logger LOGGER = Logger.getLogger(InputTourServlet.class);
 
     private static final String INPUT_PAGE = "LoadInputTourServlet";
     private static final String SUCESS = "load-insert-page";
@@ -124,9 +127,10 @@ public class InputTourServlet extends HttpServlet {
                 }
             }
         } catch (SQLException | NamingException e) {
-            e.printStackTrace();
+            LOGGER.fatal(e);
         }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
