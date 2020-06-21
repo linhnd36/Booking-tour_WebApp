@@ -67,4 +67,31 @@ public class DiscountCodeDAO implements Serializable {
         }
         return result;
     }
+
+    public DiscountCodeDTO getOneDiscountCode(String DiscountID) throws SQLException, NamingException {
+        DiscountCodeDTO dto = null;
+        try {
+            conn = MyConnection.getConnection();
+            if (conn != null) {
+                String sql = " SELECT DiscountId,Name,PercentDis,ExpiryDate,ImagesLink FROM dbo.DiscountCode WHERE DiscountId = ? AND ExpiryDate > ? ";
+                stm = conn.prepareStatement(sql);
+                stm.setString(1, DiscountID);
+                Date date = new Date(System.currentTimeMillis());
+                stm.setDate(2, date);
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    dto = new DiscountCodeDTO();
+                    dto.setDiscountId(rs.getString("DiscountId"));
+                    dto.setExpiryDate(new SimpleDateFormat("dd-MM-yyyy").format(rs.getDate("ExpiryDate")));
+                    dto.setImagesLink(rs.getString("ImagesLink"));
+                    dto.setName(rs.getString("Name"));
+                    dto.setPercentDis(rs.getInt("PercentDis"));
+                }
+            }
+        } finally {
+            close();
+        }
+        return dto;
+    }
+
 }

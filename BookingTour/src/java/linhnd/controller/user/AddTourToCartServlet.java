@@ -6,11 +6,18 @@
 package linhnd.controller.user;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import linhnd.carts.CartObject;
+import linhnd.carts.TourInCartDTO;
+import linhnd.daos.BookingDetailDAO;
+import linhnd.daos.ToursDAO;
 
 /**
  *
@@ -18,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "AddTourToCartServlet", urlPatterns = {"/AddTourToCartServlet"})
 public class AddTourToCartServlet extends HttpServlet {
+
+    private static final String SUCESS = "paging-page-search";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -31,12 +40,36 @@ public class AddTourToCartServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String url = SUCESS;
         try {
+            HttpSession session = request.getSession();
             String tourId = request.getParameter("txtTourId");
+
+            CartObject cart = (CartObject) session.getAttribute("CART");
+            BookingDetailDAO daoBookingDetail = new BookingDetailDAO();
+            ToursDAO daoTour = new ToursDAO();
+            if (cart == null) {
+                cart = new CartObject();
+            }
+
+            int quantityBooking = daoBookingDetail.countQuantityBooking(tourId);
+            int restQuantityBooking = Integer.parseInt(daoTour.getTour(tourId).getQuota()) - quantityBooking;
+
+            cart.addTourToCart(tourId, restQuantityBooking);
+            int totalBooking = 0;
+            Map<String, TourInCartDTO> listTourInCart = cart.getCart();
+            for (Map.Entry<String, TourInCartDTO> entry : listTourInCart.entrySet()) {
+                TourInCartDTO value = entry.getValue();
+                totalBooking = totalBooking + (value.getQuantity() * Integer.parseInt(value.getTourDto().getPrice()));
+            }
+
+            session.setAttribute("CART", cart);
+            session.setAttribute("TOTAL_BOOKING", totalBooking);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-
+            response.sendRedirect(url);
         }
     }
 

@@ -21,6 +21,12 @@
             <form action="login" method="POST" class="p-4" style="background-color: white; margin-top: 50px; border-radius: 2%;">
                 <h1 class="text-center">Booking Tour</h1>
                 <h4 class="text-center">Login</h4>
+                <c:set var="errorSession" value="${requestScope.PERMISSION_STATUS}"/>
+                <c:if test="${not empty errorSession}" >
+                    <div class="alert alert-danger" role="alert">
+                        ${errorSession}
+                    </div>
+                </c:if>
                 <div class="form-group">
                     <label >Username :</label>
                     <input type="text" class="form-control" placeholder="Enter username" name="txtUsername">

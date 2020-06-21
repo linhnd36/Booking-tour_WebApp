@@ -22,9 +22,10 @@ import linhnd.utils.APIWrapper;
  */
 @WebServlet(name = "LoginFacebookServlet", urlPatterns = {"/LoginFacebookServlet"})
 public class LoginFacebookServlet extends HttpServlet {
-    private static String ERROR = "error.jsp";
-    private static String SUCESS = "LoadPageSearchServlet";
-    
+
+    private static String ERROR = "login-page";
+    private static String SUCESS = "load-search-page";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -53,12 +54,13 @@ public class LoginFacebookServlet extends HttpServlet {
                 if (!userExit) {
                     dao.registerFacebookAccount(userInfo.getName(), userInfo.getFacebookID(), userInfo.getFacebookLink());
                 }
+                UsersDTO user = dao.getUserByFaceBookId(userInfo.getFacebookID());
                 HttpSession session = request.getSession();
-                session.setAttribute("USER", userInfo);
+                session.setAttribute("USER", user);
                 url = SUCESS;
-                request.getRequestDispatcher(url).forward(request, response);
+                response.sendRedirect(url);
             } else {
-                response.sendRedirect("login.jsp");
+                response.sendRedirect(url);
             }
 
         } catch (Exception e) {

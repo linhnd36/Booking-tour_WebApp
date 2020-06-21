@@ -15,11 +15,12 @@ import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import linhnd.dtos.UsersDTO;
 
 /**
  *
@@ -27,6 +28,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class FilterDispatcher implements Filter {
 
+    private static final String GUEST_URL = "linhnd.config.lable";
+    private static final String ADMIN_URL = "linhnd.config.admin";
+    private static final String USER_URL = "linhnd.config.user";
     private static final boolean debug = true;
 
     // The filter configuration object we are associated with.  If
@@ -108,29 +112,62 @@ public class FilterDispatcher implements Filter {
         }
         try {
             HttpServletRequest req = (HttpServletRequest) request;
-
+            HttpSession session = req.getSession(false);
             String uri = req.getRequestURI();
-            int lastIndex = uri.lastIndexOf("/");
-            String lable = uri.substring(lastIndex + 1);
-            String url = null;
-            ResourceBundle bundle = ResourceBundle.getBundle("linhnd.config.lable");
-            if (bundle != null) {
 
-                if (lable.contains(".jsp")
-                        || lable.contains(".png")
-                        || lable.contains(".css")
-                        || lable.contains(".js")
-                        || lable.contains(".jpg")) {
-                    url = lable;
+            int lastIndex = uri.lastIndexOf("/");
+            String label = uri.substring(lastIndex + 1);
+
+            String url = "LoadPageSearchServlet";
+            ResourceBundle bundleGuest = ResourceBundle.getBundle(GUEST_URL);
+            ResourceBundle bundleAdmin = ResourceBundle.getBundle(ADMIN_URL);
+            ResourceBundle bundleUser = ResourceBundle.getBundle(USER_URL);
+
+            if (bundleGuest != null && bundleAdmin != null && bundleUser != null) {
+                if (label.contains(".jsp")
+                        || label.contains(".png")
+                        || label.contains(".css")
+                        || label.contains(".js")
+                        || label.contains(".jpg")) {
+                    url = label;
                 } else {
-                    try {
-                        url = bundle.getString(lable);
-                    } catch (MissingResourceException e) {
-                        url = "LoadPageSearchServlet";
+                    if (bundleGuest.containsKey(label)) {
+                        url = bundleGuest.getString(label);
+                    } else {
+
+                        UsersDTO dto = (UsersDTO) session.getAttribute("USER");
+
+                        if (bundleAdmin.containsKey(label)) {
+                            if (dto == null) {
+                                url = "login.jsp";
+                                req.setAttribute("PERMISSION_STATUS", "Pls Login");
+                            } else {
+                                if (!dto.getRoleId().equals("ADMIN")) {
+                                    url = "login.jsp";
+                                    req.setAttribute("PERMISSION_STATUS", "You are not Admin");
+                                } else {
+                                    url = bundleAdmin.getString(label);
+                                }
+                            }
+                        }
+
+                        if (bundleUser.containsKey(label)) {
+                            if (dto == null) {
+                                url = "login.jsp";
+                                req.setAttribute("PERMISSION_STATUS", "Pls Login");
+                            } else {
+                                if (!dto.getRoleId().equals("USER")) {
+                                    url = "login.jsp";
+                                    req.setAttribute("PERMISSION_STATUS", "You are not User");
+                                } else {
+                                    url = bundleUser.getString(label);
+                                }
+                            }
+                        }
+
                     }
                 }
-                RequestDispatcher rd = req.getRequestDispatcher(url);
-                rd.forward(request, response);
+                req.getRequestDispatcher(url).forward(request, response);
             } else {
                 chain.doFilter(request, response);
             }

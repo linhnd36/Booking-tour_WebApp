@@ -91,8 +91,7 @@ public class SearchServlet extends HttpServlet {
                 if (daoBookingDetail.countQuantityBooking(toursDTO.getTourID()) < Integer.parseInt(toursDTO.getQuota())) {
                     listSearchValid.add(toursDTO);
                 }
-            } 
-
+            }
             int numberOfTour = listSearchValid.size();
             int page = (int) Math.ceil((double) numberOfTour / PAGE_SIZE);
             session.setAttribute("LIST_SEARCH_TOUR", listSearchValid);

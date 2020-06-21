@@ -24,6 +24,7 @@ import linhnd.dtos.ToursDTO;
  */
 public class ToursDAO implements Serializable {
 
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     Connection conn = null;
     PreparedStatement stm = null;
     ResultSet rs = null;
@@ -88,7 +89,6 @@ public class ToursDAO implements Serializable {
     public List<ToursDTO> searchTour(String loaction, String dateFrom, String dateTo, String priceFrom, String priceTo) throws SQLException, NamingException {
         List<ToursDTO> result = null;
         ToursDTO dto = null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         try {
             conn = MyConnection.getConnection();
             if (conn != null) {
@@ -112,7 +112,7 @@ public class ToursDAO implements Serializable {
                     stm.setString(4, dateTo);
                     stm.setString(5, priceFrom);
                     stm.setString(6, priceTo);
-                    
+
                 }
                 rs = stm.executeQuery();
                 result = new ArrayList<>();
@@ -133,6 +133,34 @@ public class ToursDAO implements Serializable {
             close();
         }
         return result;
+    }
+
+    public ToursDTO getTour(String idTour) throws SQLException, NamingException {
+        ToursDTO dto = null;
+        try {
+            conn = MyConnection.getConnection();
+            if (conn != null) {
+                String sql = " SELECT TourID,TourName,FromDate,ToDate,Price,Place,Quota,ImageLink "
+                        + " FROM dbo.Tours WHERE TourID = ? ";
+                stm = conn.prepareStatement(sql);
+                stm.setString(1, idTour);
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    dto = new ToursDTO();
+                    dto.setTourID(rs.getString("TourID"));
+                    dto.setTourName(rs.getString("TourName"));
+                    dto.setFromDate(dateFormat.format(rs.getDate("FromDate")));
+                    dto.setToDate(dateFormat.format(rs.getDate("ToDate")));
+                    dto.setPrice(rs.getString("Price"));
+                    dto.setPlace(rs.getString("Place"));
+                    dto.setQuota(rs.getString("Quota"));
+                    dto.setImageLink(rs.getString("ImageLink"));
+                }
+            }
+        } finally {
+            close();
+        }
+        return dto;
     }
 
 }

@@ -127,4 +127,26 @@ public class UsersDAO implements Serializable {
         }
         return check;
     }
+
+    public UsersDTO getUserByFaceBookId(String facebookId) throws SQLException, NamingException {
+        UsersDTO dto = null;
+        try {
+            conn = MyConnection.getConnection();
+            if (conn != null) {
+                String sql = " SELECT UserID,Name,RoleId FROM dbo.Users WHERE FacebookID = ? ";
+                stm = conn.prepareStatement(sql);
+                stm.setString(1, facebookId);
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    dto = new UsersDTO();
+                    dto.setUserID(rs.getString("UserID"));
+                    dto.setName(rs.getString("Name"));
+                    dto.setRoleId(rs.getString("RoleId"));
+                }
+            }
+        } finally {
+            close();
+        }
+        return dto;
+    }
 }

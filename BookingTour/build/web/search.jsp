@@ -45,7 +45,7 @@
                         </c:if>
                         <c:if test="${not empty user }">
                             <c:if test="${ user.roleId != 'ADMIN'}">
-                                <a type="button" class="btn btn-outline-warning  text-white">View Cart</a>
+                                <a href="view-cart" class="btn btn-outline-warning  text-white">View Cart</a>
                             </c:if>                    
                             <a class="btn btn-outline-secondary  text-white" href="logout">
                                 Log Out
@@ -134,7 +134,9 @@
                                     <c:url var="url" value="add-tour-to-cart">
                                         <c:param name="txtTourId" value="${dtoTour.tourID}"/>
                                     </c:url>
-                                    <a href="${url}" class="btn btn-primary">Add to Cart</a>
+                                    <c:if test="${user.roleId == 'USER'}">
+                                        <a href="${url}" class="btn btn-primary">Add to Cart</a>
+                                    </c:if>
                                 </div>
                             </div>
                         </div>

@@ -24,7 +24,7 @@ public class LoginServlet extends HttpServlet {
 
     private static final String ERROR = "login.jsp";
     private static final String ADMIN = "LoadInputTourServlet";
-    private static final String USER = "search.jsp";
+    private static final String USER = "LoadPageSearchServlet";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
