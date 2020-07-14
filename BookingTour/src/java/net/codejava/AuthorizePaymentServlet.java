@@ -7,7 +7,6 @@ package net.codejava;
 
 import com.paypal.base.rest.PayPalRESTException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,13 +32,10 @@ public class AuthorizePaymentServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String product = request.getParameter("product");
-        String subtotal = request.getParameter("subtotal");
-        String shipping = request.getParameter("shipping");
-        String tax = request.getParameter("tax");
+
         String total = request.getParameter("total");
 
-        OrderDetail orderDetail = new OrderDetail(product, subtotal, shipping, tax, total);
+        OrderDetail orderDetail = new OrderDetail("Tour", "0", "0", "0", total);
 
         try {
             PaymentServices paymentServices = new PaymentServices();

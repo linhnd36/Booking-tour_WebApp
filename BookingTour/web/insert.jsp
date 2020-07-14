@@ -43,7 +43,7 @@
         <div class="container">
             <div class="bgcolor">
                 <c:set var="error" value="${requestScope.ERROR_INPUT}"/>
-                <form action="input-tour" method="GET">
+                <form action="input-tour" method="POST"  enctype="multipart/form-data">
                     <div class="container">
                         <h3 class="p-5">Input Tour :</h3>
                         <div class=" row ml-1">

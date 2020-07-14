@@ -134,7 +134,7 @@
                                     <c:url var="url" value="add-tour-to-cart">
                                         <c:param name="txtTourId" value="${dtoTour.tourID}"/>
                                     </c:url>
-                                    <c:if test="${user.roleId == 'USER'}">
+                                    <c:if test="${empty user || user.roleId == 'USER'}">
                                         <a href="${url}" class="btn btn-primary">Add to Cart</a>
                                     </c:if>
                                 </div>

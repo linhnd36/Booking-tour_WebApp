@@ -71,4 +71,18 @@ public class BookingDAO implements Serializable {
         }
         return check;
     }
+
+    public void updateStatusBooking(String bookingId) throws SQLException, NamingException {
+        try {
+            conn = MyConnection.getConnection();
+            String sql = " UPDATE dbo.Booking SET StatusId = ? WHERE BookingId = ? ";
+            stm = conn.prepareStatement(sql);
+            stm.setString(1, "PAYPAL");
+            stm.setString(2, bookingId);
+            stm.executeUpdate();
+        } finally {
+            close();
+        }
+    }
+
 }

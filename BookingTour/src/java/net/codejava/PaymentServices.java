@@ -16,8 +16,8 @@ import com.paypal.base.rest.*;
  */
 public class PaymentServices {
 
-    private static final String CLIENT_ID = "AUnPXOLT4GfCQVcfSX9SOoIa3TN_-TAz9IwvjdUH3S1o9H6eNWdgiiH43lcLKv8FrJ-tDRLt0p5ausGe";
-    private static final String CLIENT_SECRET = "EPv1Tq-xpJiPxfAao0JpR63UX1HR5IbJYRZ3nhJ8fSC1abKJmISgUYpO8df10uiPR26L87F0FARSklqU";
+    private static final String CLIENT_ID = "AZZYikyULT0LSFCi8pKZ0mFmGaXj5QAO0-9gragna56ARWTnn_c5zenR1GUYTg7GrhzIpZazQcECLJhu";
+    private static final String CLIENT_SECRET = "EEBzMj9dvOMIoKhURzuNc6hM6lbqGEkXgMLcBQ5N9jrZWCLfE7qoneTng8U0qwb6pbFer0T16r61cOEB";
     private static final String MODE = "sandbox";
 
     public String authorizePayment(OrderDetail orderDetail) throws PayPalRESTException {
@@ -68,7 +68,7 @@ public class PaymentServices {
 
     private RedirectUrls getRedirectURLs() {
         RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl("http://localhost:8084/BookingTour/cancel.html");
+        redirectUrls.setCancelUrl("http://localhost:8084/BookingTour/cancel");
         redirectUrls.setReturnUrl("http://localhost:8084/BookingTour/review_payment");
 
         return redirectUrls;

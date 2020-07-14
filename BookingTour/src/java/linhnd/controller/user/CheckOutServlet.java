@@ -55,6 +55,8 @@ public class CheckOutServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             String discountCode = request.getParameter("discountCode");
+            String statusPaypal = request.getParameter("paypal");
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
             Date date = new Date();
 
@@ -97,11 +99,20 @@ public class CheckOutServlet extends HttpServlet {
                             daoBookingDetail.newBookingDetail(value.getTourDto().getTourID(), BookingId, String.valueOf(value.getQuantity()));
                         }
                     }
-
-                    session.setAttribute("CART", null);
-                    session.setAttribute("TOTAL_BOOKING", null);
-                    request.setAttribute("CHECK_OUT_SUCESS", "Check out Sucess !");
-                    request.getRequestDispatcher(url).forward(request, response);
+                    if (statusPaypal != null) {
+                        if (statusPaypal.equals("checkOutPaypal")) {
+                            session.setAttribute("CART", null);
+                            session.setAttribute("TOTAL_BOOKING", null);
+                            daoBooking.updateStatusBooking(BookingId);
+                            String urlPaypal = "authorize_payment?total=" + String.valueOf(totalMoneyD);
+                            response.sendRedirect(urlPaypal);
+                        }
+                    } else {
+                        session.setAttribute("CART", null);
+                        session.setAttribute("TOTAL_BOOKING", null);
+                        request.setAttribute("CHECK_OUT_SUCESS", "Check out Sucess !");
+                        request.getRequestDispatcher(url).forward(request, response);
+                    }
                 } else {
                     request.setAttribute("ERROR_CHECKOUT", listTourNotEnought);
                     request.getRequestDispatcher(url).forward(request, response);
@@ -109,6 +120,7 @@ public class CheckOutServlet extends HttpServlet {
             }
         } catch (Exception e) {
             LOGGER.fatal(e);
+            e.printStackTrace();
         }
     }
 

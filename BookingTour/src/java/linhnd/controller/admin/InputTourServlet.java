@@ -5,13 +5,18 @@
  */
 package linhnd.controller.admin;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,12 +26,21 @@ import linhnd.daos.ToursDAO;
 import linhnd.dtos.ErrorInputTour;
 import linhnd.dtos.ToursDTO;
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.FileItemFactory;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 
 /**
  *
  * @author PC
  */
 @WebServlet(name = "InputTourServlet", urlPatterns = {"/InputTourServlet"})
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class InputTourServlet extends HttpServlet {
 
     static Logger LOGGER = Logger.getLogger(InputTourServlet.class);
@@ -47,19 +61,56 @@ public class InputTourServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = INPUT_PAGE;
+        String imageUrl = null;
+        boolean foundErr = false;
+        ErrorInputTour error = new ErrorInputTour();
+
         try {
-            String tourID = request.getParameter("txtTourId");
-            String tourName = request.getParameter("txtTourName");
-            String tourPlace = request.getParameter("txtTourPlace");
-            String fromDateS = request.getParameter("txtDateFrom");
-            String toDateS = request.getParameter("txtDateTo");
-            String price = request.getParameter("txtPriceTour");
-            String quota = request.getParameter("txtQuota");
-            String imageUrl = request.getParameter("txtImagerUrl");
+
+            if (!ServletFileUpload.isMultipartContent(request)) {
+                //Khong thuc hien 
+                return;
+            }
+            FileItemFactory factory = new DiskFileItemFactory();
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            List<FileItem> items = null;
+            try {
+                items = upload.parseRequest(new ServletRequestContext(request));
+            } catch (FileUploadException e) {
+                LOGGER.fatal(e.getMessage());
+            }
+            Iterator iter = items.iterator();
+            Hashtable params = new Hashtable();
+            String fileName = null;
+            while (iter.hasNext()) {
+                FileItem item = (FileItem) iter.next();
+                if (item.isFormField()) {
+                    params.put(item.getFieldName(), item.getString());
+                } else {
+                    try {
+                        String itemName = item.getName();
+                        fileName = itemName.substring(itemName.lastIndexOf("\\") + 1);
+                        String realPath = getServletContext().getRealPath("/")
+                                + "images\\" + fileName;
+                        File saveFile = new File(realPath);
+                        item.write(saveFile);
+                        imageUrl = fileName;
+                    } catch (Exception e) {
+                        error.setErrorTourImage("Image error !");
+                        foundErr = true;
+                        LOGGER.fatal(e.getMessage());
+                    }
+                }
+            }
+            String tourID = (String) params.get("txtTourId");
+            String tourName = (String) params.get("txtTourName");
+            String tourPlace = (String) params.get("txtTourPlace");
+            String fromDateS = (String) params.get("txtDateFrom");
+            String toDateS = (String) params.get("txtDateTo");
+            String price = (String) params.get("txtPriceTour");
+            String quota = (String) params.get("txtQuota");
 
             ToursDAO dao = new ToursDAO();
-            ErrorInputTour error = new ErrorInputTour();
-            boolean foundErr = false;
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String dateFromCheck = null;
             String dateToCheck = null;
@@ -97,14 +148,17 @@ public class InputTourServlet extends HttpServlet {
                 foundErr = true;
                 error.setErrorTourName("Please, Input Name Tour");
             }
+
             if (tourPlace.trim().equals("")) {
                 foundErr = true;
                 error.setErrorTourPlace("Input Place ");
             }
+
             if (imageUrl.trim().equals("")) {
                 foundErr = true;
                 error.setErrorTourImage("Please, Select Imager Tour");
             }
+
             if (foundErr) {
                 request.setAttribute("ERROR_INPUT", error);
                 session.setAttribute("INPUT_SUCESS", null);
@@ -131,7 +185,7 @@ public class InputTourServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

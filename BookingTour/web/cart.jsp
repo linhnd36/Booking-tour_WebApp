@@ -111,6 +111,15 @@
                                 </c:url>
                                 <a href="${checkOutUrl}"
                                    class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a>
+
+                                <c:url var="checkOutUrlPayPal" value="check-out">
+                                    <c:if test="${ requestScope.DISCOUNT_CODE != 'ERROR'}">
+                                        <c:param name="discountCode" value="${requestScope.DISCOUNT_CODE.discountId}"/>
+                                    </c:if>
+                                    <c:param name="paypal" value="checkOutPaypal"/>
+                                </c:url>
+                                <a href="${checkOutUrlPayPal}"
+                                   class="btn btn-info btn-block">Checkout PayPal<i class="fa fa-angle-right"></i></a>
                             </td>
                         </tr>
                     </tfoot>
